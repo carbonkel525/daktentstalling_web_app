@@ -12,6 +12,13 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      screens: {
+        // mobile covers all screens up to iPhone 15 Pro Max size (430px)
+        'mobile': {'max': '430px'}, 
+        
+        // desk is for all screens larger than iPhone 15 Pro Max (431px and up)
+        'desk': {'min': '431px'},
+      },
     },
   },
   plugins: [],
