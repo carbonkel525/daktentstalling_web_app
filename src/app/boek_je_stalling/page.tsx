@@ -36,7 +36,8 @@ export default function BoekJeStalling() {
         <label className="block mb-2">Type Daktent</label>
         <select className="w-full mb-4 p-2 bg-white border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out">
           <option disabled selected>Type Daktent</option>
-          <option>Luifel</option>
+          <option>Soft Cover</option>
+          <option>Hard Cover</option>
           <option>Anders</option>
         </select>
 
