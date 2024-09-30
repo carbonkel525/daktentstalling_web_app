@@ -28,7 +28,7 @@ export default function BestellingOverzicht() {
       }
 
       try {
-        const response = await fetch(`/api/order-details?session_id=${sessionId}`)
+        const response = await fetch(`/api/order_details?session_id=${sessionId}`)
         if (!response.ok) {
           throw new Error('Fout bij het ophalen van bestellingsgegevens')
         }
