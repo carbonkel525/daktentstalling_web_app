@@ -1,6 +1,7 @@
 "use client"
 
-import Link from "next/link";
+import Button from "@/components/Button";
+import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 
 export default function BoekJeStalling() {
@@ -14,7 +15,8 @@ export default function BoekJeStalling() {
             >
                 Terug
             </button>
-            <h1 className="text-2xl font-bold mb-8">DAKTENTSTALLING</h1>
+            <Header />
+
             <h2 className="text-lg font-semibold p-1">Bekijk je stalling</h2>
             <p className="pb-2">Vul je referentienummer in:</p>
             <input
@@ -23,11 +25,7 @@ export default function BoekJeStalling() {
                 className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out max-w-sm"
             />
             <div className="flex flex-col space-y-4 w-full max-w-sm">
-                <Link href="/bekijk_je_stalling">
-                    <button className="bg-gray-300 text-black py-2 w-full rounded active:bg-gray-200">
-                        Doorgaan
-                    </button>
-                </Link>
+                <Button text={"Doorgaan"} route="/bekijk_je_stalling"/>
             </div>
         </div>
     );

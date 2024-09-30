@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import Button from "@/components/Button";
 
 export default function Home() {
     const router = useRouter();
@@ -17,7 +19,7 @@ export default function Home() {
                 Terug
             </button>
             {/* Hoofdtitel */}
-            <h1 className="text-2xl font-bold mb-4">DAKTENTSTALLING</h1>
+            <Header />
 
             {/* Ondertitel */}
             <h2 className="text-lg font-semibold mb-6">Plan je afhaling</h2>
@@ -31,7 +33,7 @@ export default function Home() {
 
                 {/* Datum en tijd kiezen */}
                 <div className="mb-4">
-                    <label className="block mb-2 font-semibold">Kies uw afzet moment</label>
+                    <label className="block mb-2 font-semibold">Kies uw afhaal moment</label>
                     <input
                         type="date"
                         className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
@@ -55,9 +57,7 @@ export default function Home() {
                 </div>
 
                 {/* Boeken knop */}
-                <button className="bg-gray-300 text-black py-2 rounded w-full active:bg-gray-200">
-                    Afhaal moment boeken
-                </button>
+                <Button text={"Afhaal moment boeken"}/>
             </div>
         </div>
     );

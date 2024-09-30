@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import Button from "@/components/Button";
+import Toggle from "@/components/Toggle";
 
 export default function BoekJeStalling() {
   const router = useRouter();
@@ -26,7 +29,7 @@ export default function BoekJeStalling() {
         Terug
       </button>
       {/* Hoofdtitel */}
-      <h1 className="text-2xl font-bold mb-4">DAKTENTSTALLING</h1>
+      <Header />
 
       {/* Ondertitel */}
       <h2 className="text-lg font-semibold mb-6">Boek je stalling</h2>
@@ -43,44 +46,9 @@ export default function BoekJeStalling() {
 
 
         {/* Demontage Toggle */}
-        <div className="flex justify-between items-center mb-4">
-          <span>Luifel</span>
-          <label className="flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="hidden"
-              checked={demonteer}
-              onChange={handleLuifelChange}
-            />
-            <div className={`toggle-bg w-12 h-6 bg-gray-300 rounded-full shadow-inner relative ${luifel ? "bg-green-600" : ""
-              }`}>
-              <div
-                className={`toggle-dot w-6 h-6 bg-white rounded-full shadow transform transition-transform duration-300 ${luifel ? "translate-x-6" : "translate-x-0"
-                  }`}
-              ></div>
-            </div>
-          </label>
-        </div>
-
+        <Toggle label={"Luifel"} checked={luifel} onChange={handleLuifelChange}/>
         {/* Demontage Toggle */}
-        <div className="flex justify-between items-center mb-4">
-          <span>Demontage (inclusief montage bij afhaling)</span>
-          <label className="inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="hidden"
-              checked={demonteer}
-              onChange={handleDemonteerChange}
-            />
-            <div className={`toggle-bg w-12 h-6 bg-gray-300 rounded-full shadow-inner relative ${demonteer ? "bg-green-600" : ""
-              }`}>
-              <div
-                className={`toggle-dot w-6 h-6 bg-white rounded-full shadow transform transition-transform duration-300 ${demonteer ? "translate-x-6" : "translate-x-0"
-                  }`}
-              ></div>
-            </div>
-          </label>
-        </div>
+        <Toggle label={"Demontage/montage"} checked={demonteer} onChange={handleDemonteerChange}/>
 
         {/* Datum en tijd kiezen */}
         <div className="mb-4">
@@ -114,14 +82,12 @@ export default function BoekJeStalling() {
 
         {/* Betalingsinformatie */}
         <div className="border-t border-gray-300 my-4 py-2">
-          <p>Je betaalt eenmalig: {luifel && <strong>€49.95</strong>}</p>
+          <p>Je betaalt eenmalig: {demonteer && <strong>€49.95</strong>}</p>
           <p>Je betaalt maandelijks: <strong>€49.50</strong></p>
         </div>
 
         {/* Doorgaan knop */}
-        <button className="bg-gray-300 text-black py-2 rounded w-full active:bg-gray-200">
-          Doorgaan
-        </button>
+        <Button text={"Boek je stalling"}/>
       </div>
     </div>
   );

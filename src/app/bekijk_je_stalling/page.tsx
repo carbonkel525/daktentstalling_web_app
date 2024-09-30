@@ -1,4 +1,5 @@
 "use client";
+import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 
 export default function BekijkJeStalling() {
@@ -12,7 +13,7 @@ export default function BekijkJeStalling() {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
       {/* Hoofdtitel */}
-      <h1 className="text-2xl font-bold mb-4">DAKTENTSTALLING</h1>
+      <Header />
 
       {/* Ondertitel */}
       <h2 className="text-lg font-semibold mb-6">Bekijk je stalling</h2>
