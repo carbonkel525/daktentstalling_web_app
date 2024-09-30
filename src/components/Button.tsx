@@ -4,6 +4,7 @@ import React from 'react'
 interface ButtonProps {
   text: string
   route?: string // Route is nu optioneel
+  type?: 'button' | 'submit' | 'reset' // Type is nu optioneel
 }
 
 export default function Button(props: ButtonProps) {

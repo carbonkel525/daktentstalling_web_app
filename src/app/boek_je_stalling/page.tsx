@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { loadStripe } from "@stripe/stripe-js";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import Toggle from "@/components/Toggle";
+
+// Make sure to call `loadStripe` outside of a component's render to avoid
+// recreating the `Stripe` object on every render.
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function BoekJeStalling() {
   const router = useRouter();
@@ -18,6 +23,37 @@ export default function BoekJeStalling() {
 
   const handleLuifelChange = () => {
     setLuifel(!luifel);
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    // Create a Checkout Session
+    const response = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        demonteer,
+        luifel,
+      }),
+    });
+
+    if (response.ok) {
+      const { sessionId } = await response.json();
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      const { error } = await stripe!.redirectToCheckout({
+        sessionId,
+      });
+
+      if (error) {
+        console.error('Error:', error);
+      }
+    } else {
+      console.error('Failed to create checkout session');
+    }
   };
 
   return (
@@ -35,7 +71,7 @@ export default function BoekJeStalling() {
       <h2 className="text-lg font-semibold mb-6">Boek je stalling</h2>
 
       {/* Formulier */}
-      <div className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
         <label className="block mb-2">Type Daktent</label>
         <select className="w-full mb-4 p-2 bg-white border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out">
           <option disabled selected>Type Daktent</option>
@@ -43,7 +79,6 @@ export default function BoekJeStalling() {
           <option>Hard Cover</option>
           <option>Anders</option>
         </select>
-
 
         {/* Demontage Toggle */}
         <Toggle label={"Luifel"} checked={luifel} onChange={handleLuifelChange}/>
@@ -68,16 +103,19 @@ export default function BoekJeStalling() {
           type="text"
           placeholder="Naam"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+          required
         />
         <input
           type="email"
           placeholder="Email"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+          required
         />
         <input
           type="tel"
           placeholder="Gsm"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+          required
         />
 
         {/* Betalingsinformatie */}
@@ -87,8 +125,8 @@ export default function BoekJeStalling() {
         </div>
 
         {/* Doorgaan knop */}
-        <Button text={"Boek je stalling"}/>
-      </div>
+        <Button text={"Boek je stalling"} type="submit" />
+      </form>
     </div>
   );
 }
