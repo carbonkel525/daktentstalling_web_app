@@ -6,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import Toggle from "@/components/Toggle";
+import { addBoeking } from "@/firebase/firebase";
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
@@ -16,6 +17,12 @@ export default function BoekJeStalling() {
 
   const [demonteer, setDemonteer] = useState(false);
   const [luifel, setLuifel] = useState(false);
+  const [typeCover, setTypeCover] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleDemonteerChange = () => {
     setDemonteer(!demonteer);
@@ -25,36 +32,56 @@ export default function BoekJeStalling() {
     setLuifel(!luifel);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const BoekingProps = {
+    demonteer,
+    luifel,
+  };
 
-    // Create a Checkout Session
+  const handleSubmit = async (event: React.FormEvent) => {
+  event.preventDefault(); // Voorkom standaardgedrag eerst
+
+  try {
+    // Voeg document toe aan Firebase
+    console.log("Attempting to add booking to Firebase");
+    await addBoeking({ // Hier 'await' toegevoegd
+      demontage: demonteer,
+      fullName: fullName,
+      email: email,
+      phone: phone,
+      startDate: startDate,
+      endDate: endDate,
+      typeCover: typeCover,
+      luifel: luifel,
+    });
+    console.log("Document successfully written!");
+
+    // Maak een Stripe Checkout-sessie aan
     const response = await fetch('/api/create_checkout_session', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        demonteer,
-        luifel,
-      }),
+      body: JSON.stringify({ demonteer, luifel }),
     });
 
     if (response.ok) {
       const { sessionId } = await response.json();
-      // Redirect to Stripe Checkout
       const stripe = await stripePromise;
-      const { error } = await stripe!.redirectToCheckout({
-        sessionId,
-      });
 
+      // Redirect naar Stripe Checkout
+      const { error } = await stripe!.redirectToCheckout({ sessionId });
       if (error) {
-        console.error('Error:', error);
+        console.error('Stripe redirect error:', error);
       }
     } else {
-      console.error('Failed to create checkout session');
+      console.error('Failed to create Stripe checkout session');
     }
-  };
+  } catch (error) {
+    console.error("Error in handleSubmit: ", error);
+  }
+};
+
+
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
@@ -73,17 +100,22 @@ export default function BoekJeStalling() {
       {/* Formulier */}
       <form onSubmit={handleSubmit} className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
         <label className="block mb-2">Type Daktent</label>
-        <select className="w-full mb-4 p-2 bg-white border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out">
-          <option disabled selected>Type Daktent</option>
-          <option>Soft Cover</option>
-          <option>Hard Cover</option>
-          <option>Anders</option>
+        <select
+          className="w-full mb-4 p-2 bg-white border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out"
+          value={typeCover} // Gebruik value hier
+          onChange={(e) => setTypeCover(e.target.value)}
+        >
+          <option disabled value="">Type Daktent</option> {/* Gebruik value="" om de placeholder te maken */}
+          <option value="Soft Cover">Soft Cover</option>
+          <option value="Hard Cover">Hard Cover</option>
+          <option value="Anders">Anders</option>
         </select>
 
+
         {/* Demontage Toggle */}
-        <Toggle label={"Luifel"} checked={luifel} onChange={handleLuifelChange}/>
+        <Toggle label={"Luifel"} checked={luifel} onChange={handleLuifelChange} />
         {/* Demontage Toggle */}
-        <Toggle label={"Demontage/montage"} checked={demonteer} onChange={handleDemonteerChange}/>
+        <Toggle label={"Demontage/montage"} checked={demonteer} onChange={handleDemonteerChange} />
 
         {/* Datum en tijd kiezen */}
         <div className="mb-4">
@@ -91,6 +123,7 @@ export default function BoekJeStalling() {
           <input
             type="date"
             className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            onChange={(e) => setStartDate(e.target.value)}
           />
           <input
             type="time"
@@ -104,18 +137,22 @@ export default function BoekJeStalling() {
           placeholder="Naam"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
           required
+          onChange={(e) => setFullName(e.target.value)}
+
         />
         <input
           type="email"
           placeholder="Email"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
           required
+          onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="tel"
           placeholder="Gsm"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
           required
+          onChange={(e) => setPhone(e.target.value)}
         />
 
         {/* Betalingsinformatie */}
