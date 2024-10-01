@@ -19,7 +19,7 @@ export default function BoekJeStalling() {
   const [luifel, setLuifel] = useState(false);
   const [typeCover, setTypeCover] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [endDate] = useState("");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -32,10 +32,10 @@ export default function BoekJeStalling() {
     setLuifel(!luifel);
   };
 
-  const BoekingProps = {
-    demonteer,
-    luifel,
-  };
+  // const BoekingProps = {
+  //   demonteer,
+  //   luifel,
+  // };
 
   const handleSubmit = async (event: React.FormEvent) => {
   event.preventDefault(); // Voorkom standaardgedrag eerst
