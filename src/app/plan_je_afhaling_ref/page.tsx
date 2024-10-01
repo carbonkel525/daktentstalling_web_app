@@ -3,6 +3,7 @@
 import Button from "@/components/Button";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
+import { getBoeking } from "@/firebase/firebase";
 
 export default function BoekJeStalling() {
     const router = useRouter();
@@ -25,7 +26,7 @@ export default function BoekJeStalling() {
                 className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out max-w-sm"
             />
             <div className="flex flex-col space-y-4 w-full max-w-sm">
-                <Button text={"Doorgaan"} route="/plan_je_afhaling"/> 
+                <Button text={"Doorgaan"} route="/plan_je_afhaling" onClick={getBoeking} />
             </div>
         </div>
     );

@@ -23,6 +23,7 @@ export default function BoekJeStalling() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleDemonteerChange = () => {
     setDemonteer(!demonteer);
@@ -32,54 +33,48 @@ export default function BoekJeStalling() {
     setLuifel(!luifel);
   };
 
-  // const BoekingProps = {
-  //   demonteer,
-  //   luifel,
-  // };
 
   const handleSubmit = async (event: React.FormEvent) => {
-  event.preventDefault(); // Voorkom standaardgedrag eerst
+    event.preventDefault();
+    
 
-  try {
-    // Voeg document toe aan Firebase
-    console.log("Attempting to add booking to Firebase");
-    await addBoeking({ // Hier 'await' toegevoegd
-      demontage: demonteer,
-      fullName: fullName,
-      email: email,
-      phone: phone,
-      startDate: startDate,
-      endDate: endDate,
-      typeCover: typeCover,
-      luifel: luifel,
-    });
-    console.log("Document successfully written!");
+    try {
+      // Maak een Stripe Checkout-sessie aan
+      const response = await fetch('/api/create_checkout_session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          demonteer: demonteer,
+          luifel: luifel,
+          fullName: fullName,
+          email: email,
+          phone: phone,
+          startDate: startDate,
+          typeCover: typeCover,
+        }),
+      });
 
-    // Maak een Stripe Checkout-sessie aan
-    const response = await fetch('/api/create_checkout_session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ demonteer, luifel }),
-    });
 
-    if (response.ok) {
-      const { sessionId } = await response.json();
-      const stripe = await stripePromise;
+      if (response.ok) {
+        const { sessionId } = await response.json();
+        const stripe = await stripePromise;
 
-      // Redirect naar Stripe Checkout
-      const { error } = await stripe!.redirectToCheckout({ sessionId });
-      if (error) {
-        console.error('Stripe redirect error:', error);
+        // Redirect naar Stripe Checkout
+        const { error } = await stripe!.redirectToCheckout({ sessionId });
+
+        if (error) {
+          console.error('Stripe redirect error:', error);
+        }
+      } else {
+        console.error('Failed to create Stripe checkout session');
       }
-    } else {
-      console.error('Failed to create Stripe checkout session');
+    } catch (error) {
+      console.error("Error in handleSubmit: ", error);
     }
-  } catch (error) {
-    console.error("Error in handleSubmit: ", error);
-  }
-};
+  };
+
 
 
 
