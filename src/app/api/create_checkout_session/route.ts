@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const amount = 4950 + (demonteer ? 4995 : 0);
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['bancontact', 'card', 'ideal'],
       line_items: [
         {
           price_data: {
@@ -23,8 +23,10 @@ export async function POST(req: Request) {
               name: 'Daktent Stalling',
             },
             unit_amount: amount, // in cents
+            
           },
           quantity: 1,
+          
         },
       ],
       mode: 'payment',
