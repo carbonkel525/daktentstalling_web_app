@@ -1,9 +1,32 @@
 "use client";
 import Header from "@/components/Header";
-import { useRouter } from "next/navigation";
+import { getBoekingOnRef } from "@/firebase/firebase";
+import { DocumentData } from "firebase/firestore";
+import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function BekijkJeStalling() {
   const router = useRouter();
+  const { id } = useParams();
+
+  const [boeking, setBoeking] = useState<DocumentData | null>(null);
+
+  useEffect(() => {
+    // Fetch data
+    const fetchBoeking = async () => {
+      if (typeof id === "string") {
+        const boeking = await getBoekingOnRef(id);
+        if (boeking) {
+          setBoeking(boeking);
+        }
+
+        if (!boeking) {
+          router.push("/plan_je_afhaling_ref");
+        }
+      }
+    };
+    fetchBoeking();
+  }, [id, router]);
 
   // Functie om terug te gaan naar de vorige pagina
   const handleBack = () => {
@@ -22,46 +45,44 @@ export default function BekijkJeStalling() {
       <div className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Type Daktent:</p>
-          <p className="text-gray-500">Soft Cover</p>
+          <p className="text-gray-500">{boeking ? boeking.typeCover : "N/A"}</p>
         </div>
 
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Luifel:</p>
-          <p className="text-gray-500">Ja</p>
+          <p className="text-gray-500">{boeking && boeking.luifel ? "Ja" : "N/A"}</p>
         </div>
 
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Montage bij afhaling:</p>
-          <p className="text-gray-500">Ja</p>
+          <p className="text-gray-500">{boeking && boeking.demontage ? "Ja" : "N/A"}</p>
         </div>
-
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Daktent afgezet op:</p>
-          <p className="text-gray-500">01/09/2024</p>
+          <p className="text-gray-500">{boeking ? boeking.startDate : "N/A"}</p>
         </div>
-
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Daktent afhalen op:</p>
-          <p className="text-gray-500">TBD</p>
+          <p className="text-gray-500">{boeking && boeking.endDate ? boeking.endDate : "N/A"}</p>
         </div>
-
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Naam:</p>
           <p className="text-gray-500 flex items-center">
             <span role="img" aria-label="pencil">
               ✏️
             </span>{" "}
-            Pietje Puk
+            <p className="text-gray-500">
+              {boeking ? `${boeking.firstName || ""} ${boeking.lastName || ""}`.trim() : "N/A"}
+            </p>
           </p>
         </div>
-
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Email:</p>
           <p className="text-gray-500 flex items-center">
             <span role="img" aria-label="pencil">
               ✏️
             </span>{" "}
-            pietjepuk@gmail.com
+            <p className="text-gray-500">{boeking ? boeking.email : "N/A"}</p>
           </p>
         </div>
 
@@ -71,7 +92,7 @@ export default function BekijkJeStalling() {
             <span role="img" aria-label="pencil">
               ✏️
             </span>{" "}
-            0477777777
+            <p className="text-gray-500">{boeking ? boeking.phone : "N/A"}</p>
           </p>
         </div>
 

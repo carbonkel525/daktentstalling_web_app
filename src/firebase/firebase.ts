@@ -5,6 +5,7 @@ import {
   deleteDoc,
   getDocs,
   getFirestore,
+  updateDoc,
 } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -59,7 +60,6 @@ const getStallingOnRef = async (ref: string) => {
   for (const doc of querySnapshot.docs) {
     // Gebruik for...of om de loop te controleren
     if (doc.data().boekingRef === ref) {
-      console.log("Boeking gevonden!");
       return doc.data(); // Zodra de ref matcht, return de data
     }
   }
@@ -75,7 +75,6 @@ const getBoekingOnRef = async (ref: string) => {
   for (const doc of querySnapshot.docs) {
     // Gebruik for...of om de loop te controleren
     if (doc.data().ref === ref) {
-      console.log("Boeking gevonden!");
       return doc.data(); // Zodra de ref matcht, return de data
     }
   }
@@ -123,6 +122,51 @@ const addStalling = async (props: StallingProps) => {
   }
 };
 
+interface UpdatePickupDateProps {
+  ref: string;
+  pickupDate: string;
+}
+
+const updatePickupDateStalling = async (props: UpdatePickupDateProps) => {
+  const querySnapshot = await getDocs(collection(db, "stalling"));
+  try {
+    for (const doc of querySnapshot.docs) {
+      if (doc.data().boekingRef === props.ref) {
+        await updateDoc(doc.ref, {
+          endDate: props.pickupDate,
+        });
+        return;
+      }
+    }
+  } catch (error) {
+    console.error("Error bij het bijwerken van de ophaaldatum: ", error);
+  }
+};
+
+const updatePickupDateBoeking = async (props: UpdatePickupDateProps) => {
+  const querySnapshot = await getDocs(collection(db, "boekingen"));
+  try {
+    for (const doc of querySnapshot.docs) {
+      if (doc.data().ref === props.ref) {
+        await updateDoc(doc.ref, {
+          endDate: props.pickupDate,
+        });
+        return;
+      }
+    }
+  } catch (error) {
+    console.error("Error bij het bijwerken van de ophaaldatum: ", error);
+  }
+};
+
 // Initialize Firebase
-export { addBoeking, getStallingOnRef, removeBoekingOnRef, addStalling, getBoekingOnRef };
+export {
+  addBoeking,
+  getStallingOnRef,
+  removeBoekingOnRef,
+  addStalling,
+  getBoekingOnRef,
+  updatePickupDateStalling,
+  updatePickupDateBoeking,
+};
 export default app;

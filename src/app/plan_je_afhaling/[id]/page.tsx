@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { getBoekingOnRef } from "@/firebase/firebase";
+import { getBoekingOnRef, updatePickupDateBoeking, updatePickupDateStalling } from "@/firebase/firebase";
 
 export default function PlanJeAfhaling() {
     const router = useRouter();
     const { id } = useParams();
     const [boekingMontage, setBoekingMontage] = useState("");
+    const [pickupDate, setPickupDate] = useState("");
 
     useEffect(() => {
         // Fetch data
@@ -17,7 +18,6 @@ export default function PlanJeAfhaling() {
             if (typeof id === 'string') {
                 const boeking = await getBoekingOnRef(id);
                 if (boeking) {
-                    console.log(boeking);
                     setBoekingMontage(boeking.demontage ? "Ja" : "Nee");
                 }
 
@@ -44,7 +44,13 @@ export default function PlanJeAfhaling() {
                 }),
             });
             if (response.ok) {
-                console.log("E-mail verzonden!");
+                router.push(`/stalling_overzicht/${id}`); 
+                const data = {
+                    ref: id.toString(),
+                    pickupDate: pickupDate
+                };
+                await updatePickupDateStalling(data);
+                await updatePickupDateBoeking(data);
             } else {
                 console.error("E-mail verzenden mislukt: ", response);
             }
@@ -82,6 +88,7 @@ export default function PlanJeAfhaling() {
                     <input
                         type="date"
                         className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+                        onChange={(e) => setPickupDate(e.target.value)}
                     />
                     <input
                         type="time"

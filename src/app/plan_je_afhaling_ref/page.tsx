@@ -37,7 +37,7 @@ export default function PlanJeAfhalingRef() {
             <p className="pb-2">Vul je referentienummer in:</p>
             <input
                 type="string"
-                placeholder="000000000000"
+                placeholder="DTS000000000000"
                 className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out max-w-sm"
                 onChange={(e) => setRef(e.target.value)}
             />

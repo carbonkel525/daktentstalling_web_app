@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Button from '@/components/Button'
 
-interface OrderDetails {
+interface OrderDetailsProps {
   id: string
   amount: number
   status: string
@@ -21,7 +21,7 @@ interface OrderDetails {
 }
 
 export default function BestellingOverzicht() {
-  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null)
+  const [orderDetails, setOrderDetails] = useState<OrderDetailsProps | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   
