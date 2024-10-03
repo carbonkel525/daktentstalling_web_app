@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Button from '@/components/Button'
 
@@ -21,7 +21,7 @@ interface OrderDetailsProps {
   demontage: boolean
 }
 
-export default function BestellingOverzicht() {
+function BestellingOverzichtComponent() {
   const [orderDetails, setOrderDetails] = useState<OrderDetailsProps | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -46,7 +46,6 @@ export default function BestellingOverzicht() {
         const data = await response.json()
         setOrderDetails(data)
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: unknown) {
         console.error('Fout bij het ophalen van bestellingsgegevens:', error)
         setError('Er is een fout opgetreden bij het laden van de bestellingsgegevens')
@@ -54,8 +53,6 @@ export default function BestellingOverzicht() {
         setLoading(false)
       }
     }
-
-
 
     fetchOrderDetails()
   }, [sessionId])
@@ -120,5 +117,13 @@ export default function BestellingOverzicht() {
         <Button text={"Terug naar hoofdpagina"} route={"/"} />
       </div>
     </div>
+  )
+}
+
+export default function BestellingOverzicht() {
+  return (
+    <Suspense fallback={<div>Laden...</div>}>
+      <BestellingOverzichtComponent />
+    </Suspense>
   )
 }
