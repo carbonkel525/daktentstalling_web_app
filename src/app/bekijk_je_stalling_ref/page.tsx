@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 
-export default function BoekJeStalling() {
+export default function BoekJeStallingRef() {
     const router = useRouter();
 
     return (

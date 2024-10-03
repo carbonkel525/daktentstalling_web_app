@@ -17,7 +17,7 @@ export default function Button(props: ButtonProps) {
       </button>
     </Link>
   ) : (
-    <button className="bg-gray-300 text-black py-2 w-full rounded active:bg-gray-200">
+    <button className="bg-gray-300 text-black py-2 w-full rounded active:bg-gray-200" onClick={props.onClick}>
       {props.text}
     </button>
   )

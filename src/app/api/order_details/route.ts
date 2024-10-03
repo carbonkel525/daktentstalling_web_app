@@ -20,13 +20,14 @@ export async function GET(request: Request) {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items"],
     });
-    const ref = generateRandomRef();
+    const refBoeking = generateRandomRefBoeking();
+    const refStalling = genereateRandomRefStalling();
     // Controleer of de betaling succesvol is geweest
     if (session.payment_status === "paid") {
       
       // Voeg de boeking toe aan Firebase
       await addBoeking({
-        ref: ref,
+        ref: refBoeking,
         demontage: session.metadata?.demonteer || "", // Veronderstelt dat metadata is toegevoegd in de sessie
         firstName: session.metadata?.firstName || "",
         lastName: session.metadata?.lastName || "",
@@ -45,6 +46,8 @@ export async function GET(request: Request) {
         endDate: session.metadata?.endDate || "",
         status: "active",
         tenantEmail: session.metadata?.email || "",
+        stallingRef: refStalling,
+        boekingRef: refBoeking,
       });
 
       
@@ -60,7 +63,7 @@ export async function GET(request: Request) {
       amount: session.amount_total,
       status: session.payment_status,
       items: session.line_items?.data.map((item) => item.description) || [],
-      ref: ref,
+      ref: refBoeking,
       firstName: session.metadata?.firstName || "",
       lastName: session.metadata?.lastName || "",
       email: session.metadata?.email || "",
@@ -81,7 +84,7 @@ export async function GET(request: Request) {
   }
 }
 
-function generateRandomRef(length: number = 15): string {
+function generateRandomRefBoeking(length: number = 15): string {
   // Zorg ervoor dat de lengte van het cijfergedeelte minstens 3 is (voor 'DTS' en 12 cijfers)
   if (length < 15) {
     throw new Error(
@@ -95,4 +98,20 @@ function generateRandomRef(length: number = 15): string {
 
   // Voeg 'DTS' toe aan het begin van het nummer
   return `DTS${randomDigits}`;
+}
+
+function genereateRandomRefStalling(length: number = 15): string {
+  // Zorg ervoor dat de lengte van het cijfergedeelte minstens 3 is (voor 'DTS' en 12 cijfers)
+  if (length < 15) {
+    throw new Error(
+      "Length must be at least 15 to include 'DTS' and 12 digits."
+    );
+  }
+
+  const randomDigits = Array.from({ length: length - 3 }, () =>
+    Math.floor(Math.random() * 10)
+  ).join("");
+
+  // Voeg 'DTS' toe aan het begin van het nummer
+  return `ST${randomDigits}`;
 }

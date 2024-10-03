@@ -1,14 +1,34 @@
 "use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
+import { getBoekingOnRef } from "@/firebase/firebase";
 
-export default function Home() {
+export default function PlanJeAfhaling() {
     const router = useRouter();
+    const { id } = useParams();
+    const [boekingMontage, setBoekingMontage] = useState("");
 
-    const [montage] = useState("Ja");
+    useEffect(() => {
+        // Fetch data
+        const fetchBoeking = async () => {
+            if (typeof id === 'string') {
+                const boeking = await getBoekingOnRef(id);
+                if (boeking) {
+                    setBoekingMontage(boeking.demontage ? "Ja" : "Nee");
+                }
+                
+                if (!boeking) {
+                    router.push("/plan_je_afhaling_ref");
+                }
+            }
+        };
+        fetchBoeking();
+    }, [id, router]);
+
+
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
@@ -28,7 +48,7 @@ export default function Home() {
             <div className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
                 <div className="mb-4">
                     <p className="text-sm font-semibold">Referentienummer:</p>
-                    <p className="text-gray-500">000000000000000000000000</p>
+                    <p className="text-gray-500">{id}</p>
                 </div>
 
                 {/* Datum en tijd kiezen */}
@@ -47,7 +67,7 @@ export default function Home() {
                 {/* Demontage informatie */}
                 <div className="mb-4">
                     <span className="font-semibold">Montage bij afhaling: </span>
-                    <p className="text-gray-500">{montage}</p>
+                    <p className="text-gray-500">{boekingMontage}</p>
                 </div>
 
                 {/* Adres */}
@@ -57,7 +77,7 @@ export default function Home() {
                 </div>
 
                 {/* Boeken knop */}
-                <Button text={"Afhaal moment boeken"}/>
+                <Button text={"Afhaal moment boeken"} />
             </div>
         </div>
     );

@@ -54,14 +54,17 @@ const addBoeking = async (props: BoekingProps) => {
 };
 
 const getBoekingOnRef = async (ref: string) => {
-  const querySnapshot = await getDocs(collection(db, "boekingen"));
+  const querySnapshot = await getDocs(collection(db, "stalling"));
 
   for (const doc of querySnapshot.docs) {
     // Gebruik for...of om de loop te controleren
-    if (doc.data().ref === ref) {
+    if (doc.data().boekingRef === ref) {
+      console.log("Boeking gevonden!");
       return doc.data(); // Zodra de ref matcht, return de data
     }
   }
+
+  console.log("Geen boeking gevonden met dit referentienummer");
 
   return null; // Als er geen match is, return null of een passende waarde
 };
@@ -86,6 +89,8 @@ interface StallingProps {
   endDate: string;
   status: string;
   tenantEmail: string;
+  stallingRef: string;
+  boekingRef: string;
 }
 
 const addStalling = async (props: StallingProps) => {
@@ -97,6 +102,8 @@ const addStalling = async (props: StallingProps) => {
       endDate: props.endDate,
       status: props.status,
       tenantEmail: props.tenantEmail,
+      stallingRef: props.stallingRef,
+      boekingRef: props.boekingRef,
     });
     console.log("Stalling succesvol toegevoegd!");
   } catch (error) {
