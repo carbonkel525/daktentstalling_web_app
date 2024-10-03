@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import Button from '@/components/Button'
 
 interface OrderDetails {
   id: string
@@ -9,7 +10,14 @@ interface OrderDetails {
   status: string
   items: string[]
   ref: string
-  // Voeg hier meer velden toe zoals nodig
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  startDate: string
+  typeCover: string
+  luifel: string
+  endDate?: string
 }
 
 export default function BestellingOverzicht() {
@@ -57,13 +65,23 @@ export default function BestellingOverzicht() {
 
   return (
     <Suspense>
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Bedankt voor je bestelling!</h1>
+    <div className="container mx-auto p-6 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 mx-auto flex justify-center">Bedankt voor je bestelling!</h1>
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-xl font-semibold mb-2">Bestellingsoverzicht</h2>
-        <p>Bestelnummer: {orderDetails.id}</p>
+        <p>Bestelnummer: {orderDetails.ref}</p>
         <p>Totaalbedrag: €{(orderDetails.amount / 100).toFixed(2)}</p>
-        <p>Status: {orderDetails.status}</p>
+        {orderDetails.status === 'paid' && <p>Betaald!</p>}
+        <h3 className="text-lg font-semibold mt-4 mb-2">Contactgegevens:</h3>
+        <p>Naam: {orderDetails.firstName} {orderDetails.lastName}</p>
+        <p>Email: {orderDetails.email}</p>
+        <p>Telefoonnummer: {orderDetails.phone}</p>
+        <h3 className="text-lg font-semibold mt-4 mb-2">Stallinggegevens:</h3>
+        <p>Startdatum: {orderDetails.startDate}</p>
+        {orderDetails.endDate && <p>Einddatum: {orderDetails.endDate}</p>}
+        {!orderDetails.endDate && <p>Einddatum: nog te boeken</p>}
+        <p>Type cover: {orderDetails.typeCover}</p>
+        <p>Luifel: {orderDetails.luifel}</p>
         <h3 className="text-lg font-semibold mt-4 mb-2">Bestelde items:</h3>
         <ul>
           {orderDetails.items.map((item, index) => (
@@ -71,6 +89,7 @@ export default function BestellingOverzicht() {
           ))}
         </ul>
       </div>
+      <Button text={"Terug naar hoofdpagina"} route={"/"}/>
     </div>
     </Suspense>
   )

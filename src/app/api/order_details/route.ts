@@ -61,6 +61,14 @@ export async function GET(request: Request) {
       status: session.payment_status,
       items: session.line_items?.data.map((item) => item.description) || [],
       ref: ref,
+      firstName: session.metadata?.firstName || "",
+      lastName: session.metadata?.lastName || "",
+      email: session.metadata?.email || "",
+      phone: session.metadata?.phone || "",
+      startDate: session.metadata?.startDate || "",
+      typeCover: session.metadata?.typeCover || "",
+      luifel: session.metadata?.luifel || "",
+      endDate: session.metadata?.endDate || "",
     };
 
     return NextResponse.json(orderDetails);
