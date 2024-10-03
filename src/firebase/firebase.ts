@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, deleteDoc, getDocs, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -16,7 +22,8 @@ const db = getFirestore(app);
 interface BoekingProps {
   ref: string;
   demontage: string;
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   startDate: string;
@@ -25,31 +32,14 @@ interface BoekingProps {
   luifel: string;
 }
 
-function generateRandomRef(length: number = 15): string {
-  // Zorg ervoor dat de lengte van het cijfergedeelte minstens 3 is (voor 'DTS' en 12 cijfers)
-  if (length < 15) {
-    throw new Error(
-      "Length must be at least 15 to include 'DTS' and 12 digits."
-    );
-  }
-
-  const randomDigits = Array.from({ length: length - 3 }, () =>
-    Math.floor(Math.random() * 10)
-  ).join("");
-
-  // Voeg 'DTS' toe aan het begin van het nummer
-  return `DTS${randomDigits}`;
-}
-
-
 const addBoeking = async (props: BoekingProps) => {
   try {
-    
     // Voeg een nieuw document toe met een gegenereerde id
     await addDoc(collection(db, "boekingen"), {
       ref: props.ref,
       demontage: props.demontage,
-      fullName: props.fullName,
+      firstName: props.firstName,
+      lastName: props.lastName,
       email: props.email,
       phone: props.phone,
       startDate: props.startDate,
@@ -65,20 +55,20 @@ const addBoeking = async (props: BoekingProps) => {
 
 const getBoekingOnRef = async (ref: string) => {
   const querySnapshot = await getDocs(collection(db, "boekingen"));
-  
-  for (const doc of querySnapshot.docs) {  // Gebruik for...of om de loop te controleren
+
+  for (const doc of querySnapshot.docs) {
+    // Gebruik for...of om de loop te controleren
     if (doc.data().ref === ref) {
-      return doc.data();  // Zodra de ref matcht, return de data
+      return doc.data(); // Zodra de ref matcht, return de data
     }
   }
 
-  return null;  // Als er geen match is, return null of een passende waarde
+  return null; // Als er geen match is, return null of een passende waarde
 };
 
 const removeBoekingOnRef = async (ref: string) => {
-  // Zoek het document met de gegeven ref
   const querySnapshot = await getDocs(collection(db, "boekingen"));
-  
+
   for (const doc of querySnapshot.docs) {
     if (doc.data().ref === ref) {
       // Verwijder het document met de gegeven ref
@@ -87,10 +77,33 @@ const removeBoekingOnRef = async (ref: string) => {
       return;
     }
   }
+};
 
-  console.error("Boeking niet gevonden");
+interface StallingProps {
+  tenantFirstName: string;
+  tenantLastName: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  tenantEmail: string;
 }
 
+const addStalling = async (props: StallingProps) => {
+  try {
+    await addDoc(collection(db, "stalling"), {
+      tenantFirstName: props.tenantFirstName,
+      tenantLastName: props.tenantLastName,
+      startDate: props.startDate,
+      endDate: props.endDate,
+      status: props.status,
+      tenantEmail: props.tenantEmail,
+    });
+    console.log("Stalling succesvol toegevoegd!");
+  } catch (error) {
+    console.error("Error bij het toevoegen van stalling: ", error);
+  }
+};
+
 // Initialize Firebase
-export { addBoeking, getBoekingOnRef, removeBoekingOnRef };
+export { addBoeking, getBoekingOnRef, removeBoekingOnRef, addStalling };
 export default app;

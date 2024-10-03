@@ -1,4 +1,4 @@
-import { addBoeking, getBoekingOnRef, removeBoekingOnRef } from "@/firebase/firebase";
+import { addBoeking, addStalling } from "@/firebase/firebase";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -7,6 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function GET(request: Request) {
+
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get("session_id");
 
@@ -27,13 +28,23 @@ export async function GET(request: Request) {
       await addBoeking({
         ref: ref,
         demontage: session.metadata?.demonteer || "", // Veronderstelt dat metadata is toegevoegd in de sessie
-        fullName: session.metadata?.fullName || "",
+        firstName: session.metadata?.firstName || "",
+        lastName: session.metadata?.lastName || "",
         email: session.metadata?.email || "",
         phone: session.metadata?.phone || "",
         startDate: session.metadata?.startDate || "",
         endDate: session.metadata?.endDate || "",
         typeCover: session.metadata?.typeCover || "",
         luifel: session.metadata?.luifel || "",
+      });
+
+      await addStalling({
+        tenantFirstName: session.metadata?.firstName || "",
+        tenantLastName: session.metadata?.lastName || "",
+        startDate: session.metadata?.startDate || "",
+        endDate: session.metadata?.endDate || "",
+        status: "active",
+        tenantEmail: session.metadata?.email || "",
       });
 
       

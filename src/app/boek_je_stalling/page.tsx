@@ -6,7 +6,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import Toggle from "@/components/Toggle";
-import { addBoeking } from "@/firebase/firebase";
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
@@ -19,11 +18,10 @@ export default function BoekJeStalling() {
   const [luifel, setLuifel] = useState(false);
   const [typeCover, setTypeCover] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [endDate] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleDemonteerChange = () => {
     setDemonteer(!demonteer);
@@ -48,7 +46,8 @@ export default function BoekJeStalling() {
         body: JSON.stringify({
           demonteer: demonteer,
           luifel: luifel,
-          fullName: fullName,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           phone: phone,
           startDate: startDate,
@@ -129,10 +128,18 @@ export default function BoekJeStalling() {
         {/* Invoervelden voor Naam, Email en Gsm */}
         <input
           type="text"
-          placeholder="Naam"
+          placeholder="Voornaam"
           className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
           required
-          onChange={(e) => setFullName(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
+
+        />
+        <input
+          type="text"
+          placeholder="Achternaam"
+          className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+          required
+          onChange={(e) => setLastName(e.target.value)}
 
         />
         <input

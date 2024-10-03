@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { demonteer, luifel, fullName, email, phone, startDate, typeCover } = body;
+    const { demonteer, luifel, firstName, lastName, email, phone, startDate, typeCover } = body;
     console.log("Received data:", body);
 
     // Bereken het totale bedrag
@@ -35,7 +35,8 @@ export async function POST(req: Request) {
       metadata: {
         demonteer: demonteer.toString(),
         luifel: luifel.toString(),
-        fullName: fullName,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         phone: phone,
         startDate: startDate,

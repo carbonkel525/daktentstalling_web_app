@@ -2,8 +2,6 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { get } from 'http'
-import { removeBoekingOnRef } from '@/firebase/firebase'
 
 interface OrderDetails {
   id: string
@@ -39,9 +37,6 @@ export default function BestellingOverzicht() {
         const data = await response.json()
         setOrderDetails(data)
         
-        if (data && data.ref) {
-          await removeBoekingOnRef(data.ref);
-        }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: unknown) {
         console.error('Fout bij het ophalen van bestellingsgegevens:', error)
@@ -54,7 +49,7 @@ export default function BestellingOverzicht() {
     
 
     fetchOrderDetails()
-  }, [])
+  }, [sessionId])
 
   if (loading) return <div>Laden...</div>
   if (error) return <div>Fout: {error}</div>
