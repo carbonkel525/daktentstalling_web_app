@@ -9,7 +9,7 @@ import Toggle from "@/components/Toggle";
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe("pk_test_51PCfeIJAdyDva5459YlkbIczLfrm2sMoW1HyOi5ZpOPLBEux48B94kPaFCcWdZIcpbrXw1u7Mb85ZjAnHDBgrRLK00AhhlQtli"!);
 
 export default function BoekJeStalling() {
   const router = useRouter();
