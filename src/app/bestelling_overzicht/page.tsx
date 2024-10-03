@@ -24,7 +24,7 @@ export default function BestellingOverzicht() {
   const [orderDetails, setOrderDetails] = useState<OrderDetailsProps | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
+
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
 
@@ -44,8 +44,8 @@ export default function BestellingOverzicht() {
         }
         const data = await response.json()
         setOrderDetails(data)
-        
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: unknown) {
         console.error('Fout bij het ophalen van bestellingsgegevens:', error)
         setError('Er is een fout opgetreden bij het laden van de bestellingsgegevens')
@@ -54,7 +54,7 @@ export default function BestellingOverzicht() {
       }
     }
 
-    
+
 
     fetchOrderDetails()
   }, [sessionId])
@@ -65,32 +65,34 @@ export default function BestellingOverzicht() {
 
   return (
     <Suspense>
-    <div className="container mx-auto p-6 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4 mx-auto flex justify-center">Bedankt voor je bestelling!</h1>
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-xl font-semibold mb-2">Bestellingsoverzicht</h2>
-        <p>Bestelnummer: {orderDetails.ref}</p>
-        <p>Totaalbedrag: €{(orderDetails.amount / 100).toFixed(2)}</p>
-        {orderDetails.status === 'paid' && <p>Betaald!</p>}
-        <h3 className="text-lg font-semibold mt-4 mb-2">Contactgegevens:</h3>
-        <p>Naam: {orderDetails.firstName} {orderDetails.lastName}</p>
-        <p>Email: {orderDetails.email}</p>
-        <p>Telefoonnummer: {orderDetails.phone}</p>
-        <h3 className="text-lg font-semibold mt-4 mb-2">Stallinggegevens:</h3>
-        <p>Startdatum: {orderDetails.startDate}</p>
-        {orderDetails.endDate && <p>Einddatum: {orderDetails.endDate}</p>}
-        {!orderDetails.endDate && <p>Einddatum: nog te boeken</p>}
-        <p>Type cover: {orderDetails.typeCover}</p>
-        <p>Luifel: {orderDetails.luifel}</p>
-        <h3 className="text-lg font-semibold mt-4 mb-2">Bestelde items:</h3>
-        <ul>
-          {orderDetails.items.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+      <div className="p-6 min-h-screen flex">
+        <h1 className="text-2xl font-bold mb-4 mx-auto flex justify-center">Bedankt voor je bestelling!</h1>
+        <div className="shadow-md rounded px-8 pt-6 pb-8 mb-4 bg-gray-100 max-w-96">
+          <h2 className="text-xl font-semibold mb-2">Bestellingsoverzicht</h2>
+          <p>Bestelnummer: {orderDetails.ref}</p>
+          <p>Totaalbedrag: €{(orderDetails.amount / 100).toFixed(2)}</p>
+          {orderDetails.status === 'paid' && <p>Betaald!</p>}
+          <h3 className="text-lg font-semibold mt-4 mb-2">Contactgegevens:</h3>
+          <p>Naam: {orderDetails.firstName} {orderDetails.lastName}</p>
+          <p>Email: {orderDetails.email}</p>
+          <p>Telefoonnummer: {orderDetails.phone}</p>
+          <h3 className="text-lg font-semibold mt-4 mb-2">Stallinggegevens:</h3>
+          <p>Startdatum: {orderDetails.startDate}</p>
+          {orderDetails.endDate && <p>Einddatum: {orderDetails.endDate}</p>}
+          {!orderDetails.endDate && <p>Einddatum: nog te boeken</p>}
+          <p>Type cover: {orderDetails.typeCover}</p>
+          <p>Luifel: {orderDetails.luifel}</p>
+          <h3 className="text-lg font-semibold mt-4 mb-2">Bestelde items:</h3>
+          <ul>
+            {orderDetails.items.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div className='max-w-96'>
+          <Button text={"Terug naar hoofdpagina"} route={"/"} />
+        </div>
       </div>
-      <Button text={"Terug naar hoofdpagina"} route={"/"}/>
-    </div>
     </Suspense>
   )
 }
