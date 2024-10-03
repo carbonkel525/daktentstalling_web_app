@@ -43,7 +43,7 @@ export default function BekijkJeStallingRef() {
                 onChange={(e) => setRef(e.target.value)}
             />
             <div className="flex flex-col space-y-4 w-full max-w-sm">
-                <Button text={"Doorgaan"} onClick={handleGetBoekingOnRef}/>
+                <Button text={"Doorgaan"} onClick={handleGetBoekingOnRef} />
             </div>
         </div>
     );
