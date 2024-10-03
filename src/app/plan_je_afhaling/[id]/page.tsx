@@ -106,7 +106,7 @@ export default function PlanJeAfhaling() {
                 {/* Adres */}
                 <div className="mb-4">
                     <p className="font-semibold">Adres:</p>
-                    <p className="text-gray-500">Teststraat 123, 0000, Testdrop</p>
+                    <p className="text-gray-500">Depot Wilaert-Van Boom, Liezele-dorp 22-24, 2870 Puurs-St-Amands</p>
                 </div>
 
                 {/* Boeken knop */}
