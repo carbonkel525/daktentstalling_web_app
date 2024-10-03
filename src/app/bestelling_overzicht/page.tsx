@@ -109,18 +109,12 @@ export default function BestellingOverzicht() {
         </div>
         <div className='flex justify-between'>
           <p>Luifel: </p>
-          <p>{orderDetails.luifel ? "Ja" : "Nee"}</p>
+          <p>{!orderDetails.luifel ? "Ja" : "Nee"}</p>
         </div>
         <div className='flex justify-between'>
           <p>Demontage bij afzetten: </p>
           <p>{orderDetails.demontage ? "Ja" : "Nee"}</p>
         </div>
-        <h3 className="text-lg font-semibold mt-4 mb-2">Bestelde items:</h3>
-        <ul>
-          {orderDetails.items.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
       </div>
       <div className="mt-4 min-w-96">
         <Button text={"Terug naar hoofdpagina"} route={"/"} />

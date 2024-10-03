@@ -12,8 +12,8 @@ interface BoekingInformationProps {
     startDate: string
     endDate: string
     typeCover: string
-    luifel: string
-    demontage: string
+    luifel: boolean
+    demontage: boolean
     ref: string
 }
 
@@ -50,7 +50,7 @@ export default function StallingOverzicht() {
     return (
         <div className="flex flex-col justify-center items-center min-h-screen p-6">
             <h1 className="text-2xl font-bold mb-4 text-center">Afhaal moment geboekt</h1>
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl w-full">
+            <div className="bg-gray-100 shadow-md rounded-md px-8 pt-6 pb-8 mb-4 max-w-xl w-full">
                 <p className="text-lg font-bold">Bedankt voor het boeken van een afhaal moment!</p>
                 <div className='flex justify-between'>
                     <p className='text-lg'>Referentienummer boeking:</p>
@@ -69,11 +69,11 @@ export default function StallingOverzicht() {
                     <p className='text-lg'>{boekingInformation?.phone}</p>
                 </div>
                 <div className='flex justify-between'>
-                    <p className='text-lg'>Startdatum: </p>
+                    <p className='text-lg'>Daktent afgezet op: </p>
                     <p className='text-lg'>{boekingInformation?.startDate}</p>
                 </div>
                 <div className='flex justify-between'>
-                    <p className='text-lg'>Einddatum: </p>
+                    <p className='text-lg'>Daktent afhalen op: </p>
                     <p className='text-lg'>{boekingInformation?.endDate}</p>
                 </div>
                 <p className="text-lg font-bold pt-2">Je ontvangt ook een e-mail met de details van je afhaal moment.</p>

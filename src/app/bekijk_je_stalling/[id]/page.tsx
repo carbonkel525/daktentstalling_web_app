@@ -10,14 +10,18 @@ export default function BekijkJeStalling() {
   const { id } = useParams();
 
   const [boeking, setBoeking] = useState<DocumentData | null>(null);
+  const [boekingMontage, setBoekingMontage] = useState("");
 
   useEffect(() => {
     // Fetch data
     const fetchBoeking = async () => {
       if (typeof id === "string") {
         const boeking = await getBoekingOnRef(id);
-        if (boeking) {
+        if (boeking && boeking.demontage == "false") {
+          setBoekingMontage("Nee");
           setBoeking(boeking);
+        } else if (boeking && boeking.demontage == "true") {
+          setBoekingMontage("Ja");
         }
 
         if (!boeking) {

@@ -17,10 +17,11 @@ export default function PlanJeAfhaling() {
         const fetchBoeking = async () => {
             if (typeof id === 'string') {
                 const boeking = await getBoekingOnRef(id);
-                if (boeking) {
-                    setBoekingMontage(boeking.demontage ? "Ja" : "Nee");
+                if (boeking && boeking.demontage == "false") {
+                    setBoekingMontage("Nee");
+                } else if (boeking && boeking.demontage == "true") {
+                    setBoekingMontage("Ja");
                 }
-
                 if (!boeking) {
                     router.push("/plan_je_afhaling_ref");
                 }
@@ -44,7 +45,7 @@ export default function PlanJeAfhaling() {
                 }),
             });
             if (response.ok) {
-                router.push(`/stalling_overzicht/${id}`); 
+                router.push(`/stalling_overzicht/${id}`);
                 const data = {
                     ref: id.toString(),
                     pickupDate: pickupDate
@@ -109,7 +110,7 @@ export default function PlanJeAfhaling() {
                 </div>
 
                 {/* Boeken knop */}
-                <Button text={"Afhaal moment boeken"} onClick={sendEmailToAdmins}/>
+                <Button text={"Afhaal moment boeken"} onClick={sendEmailToAdmins} />
             </div>
         </div>
     );

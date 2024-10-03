@@ -1,4 +1,4 @@
-import { addBoeking, addStalling } from "@/firebase/firebase";
+import { addBoeking, addStalling, getBoekingOnRef } from "@/firebase/firebase";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -7,7 +7,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function GET(request: Request) {
-
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get("session_id");
 
@@ -20,15 +19,27 @@ export async function GET(request: Request) {
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items"],
     });
-    const refBoeking = generateRandomRefBoeking();
-    const refStalling = genereateRandomRefStalling();
+
+    const refBoeking = session.metadata?.refBoeking;
+    const refStalling = session.metadata?.refStalling;
+
+    // Controleer of er al een boeking met hetzelfde referentienummer bestaat
+    const existingBoeking = refBoeking ? await getBoekingOnRef(refBoeking) : null;
+    if (existingBoeking) {
+      console.log("Boeking met dit referentienummer bestaat al, geen nieuwe boeking toegevoegd.");
+      return NextResponse.json(
+        { message: "Boeking met dit referentienummer bestaat al." },
+        { status: 200 }
+      );
+    }
+
     // Controleer of de betaling succesvol is geweest
-    if (session.payment_status === "paid") {
+    if (session.payment_status === "paid" && refBoeking) {
       
-      // Voeg de boeking toe aan Firebase
+      // Voeg de boeking toe aan Firebase als deze nog niet bestaat
       await addBoeking({
         ref: refBoeking,
-        demontage: session.metadata?.demonteer || "", // Veronderstelt dat metadata is toegevoegd in de sessie
+        demontage: session.metadata?.demonteer || "",
         firstName: session.metadata?.firstName || "",
         lastName: session.metadata?.lastName || "",
         email: session.metadata?.email || "",
@@ -39,6 +50,7 @@ export async function GET(request: Request) {
         luifel: session.metadata?.luifel || "",
       });
 
+      // Voeg de stalling toe aan Firebase
       await addStalling({
         tenantFirstName: session.metadata?.firstName || "",
         tenantLastName: session.metadata?.lastName || "",
@@ -46,11 +58,9 @@ export async function GET(request: Request) {
         endDate: session.metadata?.endDate || "",
         status: "active",
         tenantEmail: session.metadata?.email || "",
-        stallingRef: refStalling,
+        stallingRef: refStalling || "",
         boekingRef: refBoeking,
       });
-
-      
     } else {
       return NextResponse.json(
         { error: "Payment not completed" },
@@ -58,6 +68,7 @@ export async function GET(request: Request) {
       );
     }
 
+    // Stuur de ordergegevens terug
     const orderDetails = {
       id: session.id,
       amount: session.amount_total,
@@ -84,34 +95,4 @@ export async function GET(request: Request) {
   }
 }
 
-function generateRandomRefBoeking(length: number = 15): string {
-  // Zorg ervoor dat de lengte van het cijfergedeelte minstens 3 is (voor 'DTS' en 12 cijfers)
-  if (length < 15) {
-    throw new Error(
-      "Length must be at least 15 to include 'DTS' and 12 digits."
-    );
-  }
 
-  const randomDigits = Array.from({ length: length - 3 }, () =>
-    Math.floor(Math.random() * 10)
-  ).join("");
-
-  // Voeg 'DTS' toe aan het begin van het nummer
-  return `DTS${randomDigits}`;
-}
-
-function genereateRandomRefStalling(length: number = 15): string {
-  // Zorg ervoor dat de lengte van het cijfergedeelte minstens 3 is (voor 'DTS' en 12 cijfers)
-  if (length < 15) {
-    throw new Error(
-      "Length must be at least 15 to include 'DTS' and 12 digits."
-    );
-  }
-
-  const randomDigits = Array.from({ length: length - 3 }, () =>
-    Math.floor(Math.random() * 10)
-  ).join("");
-
-  // Voeg 'DTS' toe aan het begin van het nummer
-  return `ST${randomDigits}`;
-}

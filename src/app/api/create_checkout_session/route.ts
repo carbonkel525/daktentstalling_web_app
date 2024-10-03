@@ -12,6 +12,9 @@ export async function POST(req: Request) {
     const { demonteer, luifel, firstName, lastName, email, phone, startDate, typeCover } = body;
     console.log("Received data:", body);
 
+    const refBoeking = generateRandomRefBoeking();
+    const refStalling = genereateRandomRefStalling();
+
     // Bereken het totale bedrag
     const amount = 4950 + (demonteer ? 4995 : 0);
 
@@ -41,6 +44,8 @@ export async function POST(req: Request) {
         phone: phone,
         startDate: startDate,
         typeCover: typeCover,
+        refBoeking: refBoeking,
+        refStalling: refStalling,
       },
     });
 
@@ -52,5 +57,33 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+
+function generateRandomRefBoeking(length: number = 15): string {
+  if (length < 15) {
+    throw new Error(
+      "Length must be at least 15 to include 'DTS' and 12 digits."
+    );
+  }
+
+  const randomDigits = Array.from({ length: length - 3 }, () =>
+    Math.floor(Math.random() * 10)
+  ).join("");
+
+  return `DTS${randomDigits}`;
+}
+
+function genereateRandomRefStalling(length: number = 15): string {
+  if (length < 15) {
+    throw new Error(
+      "Length must be at least 15 to include 'DTS' and 12 digits."
+    );
+  }
+
+  const randomDigits = Array.from({ length: length - 3 }, () =>
+    Math.floor(Math.random() * 10)
+  ).join("");
+
+  return `ST${randomDigits}`;
 }
 
