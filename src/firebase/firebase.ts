@@ -53,7 +53,7 @@ const addBoeking = async (props: BoekingProps) => {
   }
 };
 
-const getBoekingOnRef = async (ref: string) => {
+const getStallingOnRef = async (ref: string) => {
   const querySnapshot = await getDocs(collection(db, "stalling"));
 
   for (const doc of querySnapshot.docs) {
@@ -67,6 +67,18 @@ const getBoekingOnRef = async (ref: string) => {
   console.log("Geen boeking gevonden met dit referentienummer");
 
   return null; // Als er geen match is, return null of een passende waarde
+};
+
+const getBoekingOnRef = async (ref: string) => {
+  const querySnapshot = await getDocs(collection(db, "boekingen"));
+
+  for (const doc of querySnapshot.docs) {
+    // Gebruik for...of om de loop te controleren
+    if (doc.data().ref === ref) {
+      console.log("Boeking gevonden!");
+      return doc.data(); // Zodra de ref matcht, return de data
+    }
+  }
 };
 
 const removeBoekingOnRef = async (ref: string) => {
@@ -112,5 +124,5 @@ const addStalling = async (props: StallingProps) => {
 };
 
 // Initialize Firebase
-export { addBoeking, getBoekingOnRef, removeBoekingOnRef, addStalling };
+export { addBoeking, getStallingOnRef, removeBoekingOnRef, addStalling, getBoekingOnRef };
 export default app;

@@ -17,9 +17,10 @@ export default function PlanJeAfhaling() {
             if (typeof id === 'string') {
                 const boeking = await getBoekingOnRef(id);
                 if (boeking) {
+                    console.log(boeking);
                     setBoekingMontage(boeking.demontage ? "Ja" : "Nee");
                 }
-                
+
                 if (!boeking) {
                     router.push("/plan_je_afhaling_ref");
                 }
@@ -27,6 +28,30 @@ export default function PlanJeAfhaling() {
         };
         fetchBoeking();
     }, [id, router]);
+
+    const sendEmailToAdmins = async () => {
+        // Send email to admins
+        try {
+            const response = await fetch("/api/send-email-to-admin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    receiver: "losanton280@gmail.com",
+                    subject: "Afhaal moment informatie",
+                    message: "Er is een nieuwe afhaling gepland!",
+                }),
+            });
+            if (response.ok) {
+                console.log("E-mail verzonden!");
+            } else {
+                console.error("E-mail verzenden mislukt: ", response);
+            }
+        } catch (error) {
+            console.error("E-mail verzenden mislukt: ", error);
+        }
+    }
 
 
 
@@ -77,7 +102,7 @@ export default function PlanJeAfhaling() {
                 </div>
 
                 {/* Boeken knop */}
-                <Button text={"Afhaal moment boeken"} />
+                <Button text={"Afhaal moment boeken"} onClick={sendEmailToAdmins}/>
             </div>
         </div>
     );
