@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
-import Button from "@/components/Button";
 import { getBoekingOnRef, updatePickupDateBoeking, updatePickupDateStalling } from "@/firebase/firebase";
+import { Button } from "@/components/ui/button";
 
 export default function PlanJeAfhaling() {
     const router = useRouter();
@@ -110,7 +110,7 @@ export default function PlanJeAfhaling() {
                 </div>
 
                 {/* Boeken knop */}
-                <Button text={"Afhaal moment boeken"} onClick={sendEmailToAdmins} />
+                <Button onClick={sendEmailToAdmins} />
             </div>
         </div>
     );

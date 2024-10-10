@@ -26,12 +26,9 @@ export async function GET(request: Request) {
     // Controleer of er al een boeking met hetzelfde referentienummer bestaat
     const existingBoeking = refBoeking ? await getBoekingOnRef(refBoeking) : null;
     if (existingBoeking) {
-      console.log("Boeking met dit referentienummer bestaat al, geen nieuwe boeking toegevoegd.");
-      return NextResponse.json(
-        { message: "Boeking met dit referentienummer bestaat al." },
-        { status: 200 }
-      );
-    }
+      return NextResponse.json(existingBoeking, { status: 200 });
+   }
+   
 
     // Controleer of de betaling succesvol is geweest
     if (session.payment_status === "paid" && refBoeking) {
@@ -70,9 +67,9 @@ export async function GET(request: Request) {
 
     // Stuur de ordergegevens terug
     const orderDetails = {
-      id: session.id,
-      amount: session.amount_total,
-      status: session.payment_status,
+      id: session?.id,
+      amount_total: session?.amount_total,
+      status_status: session?.payment_status,
       items: session.line_items?.data.map((item) => item.description) || [],
       ref: refBoeking,
       firstName: session.metadata?.firstName || "",

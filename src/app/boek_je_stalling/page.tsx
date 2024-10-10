@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import Header from "@/components/Header";
-import Button from "@/components/Button";
 import Toggle from "@/components/Toggle";
+import { Button } from "@/components/ui/button";
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
-const stripePromise = loadStripe("pk_test_51PCfeIJAdyDva5459YlkbIczLfrm2sMoW1HyOi5ZpOPLBEux48B94kPaFCcWdZIcpbrXw1u7Mb85ZjAnHDBgrRLK00AhhlQtli"!);
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function BoekJeStalling() {
   const router = useRouter();
@@ -164,7 +164,7 @@ export default function BoekJeStalling() {
         </div>
 
         {/* Doorgaan knop */}
-        <Button text={"Boek je stalling"} type="submit" />
+        <Button type="submit" />
       </form>
     </div>
   );

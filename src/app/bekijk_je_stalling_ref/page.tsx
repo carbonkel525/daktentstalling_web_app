@@ -1,7 +1,7 @@
 "use client"
 
-import Button from "@/components/Button";
 import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
 import { getBoekingOnRef } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -43,7 +43,7 @@ export default function BekijkJeStallingRef() {
                 onChange={(e) => setRef(e.target.value)}
             />
             <div className="flex flex-col space-y-4 w-full max-w-sm">
-                <Button text={"Doorgaan"} onClick={handleGetBoekingOnRef} />
+                <Button onClick={handleGetBoekingOnRef}></Button>
             </div>
         </div>
     );

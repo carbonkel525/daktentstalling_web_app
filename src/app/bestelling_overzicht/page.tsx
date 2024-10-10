@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import Button from '@/components/Button'
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 interface OrderDetailsProps {
   id: string
-  amount: number
+  amount_total: number
   status: string
   items: string[]
   ref: string
@@ -16,46 +16,49 @@ interface OrderDetailsProps {
   phone: string
   startDate: string
   typeCover: string
-  luifel: boolean
+  luifel: string
   endDate?: string
-  demontage: boolean
+  demontage: string
 }
 
-function BestellingOverzichtComponent() {
-  const [orderDetails, setOrderDetails] = useState<OrderDetailsProps | null>(null)
+export default function BestellingOverzicht() {
+  const router = useRouter()
+  const [orderDetails, setOrderDetails] = useState<OrderDetailsProps>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
 
+  console.log('Session ID ontvangen:', sessionId);
+
   useEffect(() => {
     const fetchOrderDetails = async () => {
       if (!sessionId) {
-        setError('Geen sessie-ID gevonden')
-        setLoading(false)
-        return
+        setError('Geen sessie-ID gevonden');
+        setLoading(false);
+        return;
       }
-
+  
       try {
-        const response = await fetch(`/api/order_details?session_id=${sessionId}`)
-
+        const response = await fetch(`/api/order_details?session_id=${sessionId}`);
         if (!response.ok) {
-          throw new Error('Fout bij het ophalen van bestellingsgegevens')
+          throw new Error('Fout bij het ophalen van bestellingsgegevens');
         }
-        const data = await response.json()
-        setOrderDetails(data)
-
+        const data = await response.json();
+        console.log('data details:', data);  // Log de data die je ophaalt
+        setOrderDetails(data);
       } catch (error: unknown) {
-        console.error('Fout bij het ophalen van bestellingsgegevens:', error)
-        setError('Er is een fout opgetreden bij het laden van de bestellingsgegevens')
+        console.error('Fout bij het ophalen van bestellingsgegevens:', error);
+        setError('Er is een fout opgetreden bij het laden van de bestellingsgegevens');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-
-    fetchOrderDetails()
-  }, [sessionId])
+    };
+  
+    fetchOrderDetails();
+  }, [sessionId]);
+  
 
   if (loading) return <div>Laden...</div>
   if (error) return <div>Fout: {error}</div>
@@ -72,7 +75,7 @@ function BestellingOverzichtComponent() {
         </div>
         <div className='flex justify-between'>
           <p>Totaalbedrag: </p>
-          <p>€{(orderDetails.amount / 100).toFixed(2)}</p>
+          <p>€{(orderDetails.amount_total / 100).toFixed(2)}</p>
         </div>
         <div className='flex justify-between'>
           <p>Betaling: </p>
@@ -114,16 +117,9 @@ function BestellingOverzichtComponent() {
         </div>
       </div>
       <div className="mt-4 min-w-96">
-        <Button text={"Terug naar hoofdpagina"} route={"/"} />
+        <Button onClick={() => router.push("/")}></Button>
       </div>
     </div>
   )
 }
 
-export default function BestellingOverzicht() {
-  return (
-    <Suspense fallback={<div>Laden...</div>}>
-      <BestellingOverzichtComponent />
-    </Suspense>
-  )
-}

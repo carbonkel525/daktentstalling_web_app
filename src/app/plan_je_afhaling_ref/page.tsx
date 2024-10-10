@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import { useRouter } from "next/navigation";
 import { getBoekingOnRef } from "@/firebase/firebase";
 import { useState } from "react";
-import Button from "@/components/Button";
+import { Button } from "@/components/ui/button";
 
 export default function PlanJeAfhalingRef() {
     const router = useRouter();
@@ -42,7 +42,7 @@ export default function PlanJeAfhalingRef() {
                 onChange={(e) => setRef(e.target.value)}
             />
             <div className="w-full max-w-sm">
-                <Button text={"doorgaan"} onClick={handleGetBoekingOnRef} />
+                <Button onClick={handleGetBoekingOnRef}></Button>
             </div>
         </div>
     );

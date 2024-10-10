@@ -1,8 +1,9 @@
 'use client'
-import Button from '@/components/Button'
-import { useParams } from 'next/navigation'
+
+import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { getBoekingOnRef } from '@/firebase/firebase'
+import { Button } from '@/components/ui/button'
 
 interface BoekingInformationProps {
     firstName: string
@@ -46,11 +47,12 @@ export default function StallingOverzicht() {
         fetchStallingDetails()
     }, [id])
 
+    const router = useRouter()
 
     return (
         <div className="flex flex-col justify-center items-center min-h-screen p-6">
             <h1 className="text-2xl font-bold mb-4 text-center">Afhaal moment geboekt</h1>
-            <div className="bg-gray-100 shadow-md rounded-md px-8 pt-6 pb-8 mb-4 max-w-xl w-full">
+            <div className="shadow-md rounded-md px-8 pt-6 pb-8 mb-4 max-w-xl w-full">
                 <p className="text-lg font-bold">Bedankt voor het boeken van een afhaal moment!</p>
                 <div className='flex justify-between'>
                     <p className='text-lg'>Referentienummer boeking:</p>
@@ -79,7 +81,7 @@ export default function StallingOverzicht() {
                 <p className="text-lg font-bold pt-2">Je ontvangt ook een e-mail met de details van je afhaal moment.</p>
             </div>
             <div className='w-96'>
-                <Button text={"Terug naar hoofdpagina"} route={"/"} />
+                <Button onClick={() => router.push("/")} />
             </div>
         </div>
     )
