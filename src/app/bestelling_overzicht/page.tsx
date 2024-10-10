@@ -67,7 +67,7 @@ export default function BestellingOverzicht() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6">
       <h1 className="text-2xl font-bold mb-4">Bedankt voor je bestelling!</h1>
-      <div className="shadow-md rounded-sm px-8 pt-6 pb-8 mb-4 bg-gray-100 max-w-lg w-full">
+      <div className="shadow-md rounded-sm px-8 pt-6 pb-8 mb-4 max-w-lg w-full">
         <h2 className="text-xl font-semibold mb-2">Bestellingsoverzicht</h2>
         <div className='flex justify-between'>
           <p>Bestelnummer: </p>
@@ -117,7 +117,7 @@ export default function BestellingOverzicht() {
         </div>
       </div>
       <div className="mt-4 min-w-96">
-        <Button onClick={() => router.push("/")}></Button>
+        <Button onClick={() => router.push("/")} className='w-full'>Terug naar Home</Button>
       </div>
     </div>
   )

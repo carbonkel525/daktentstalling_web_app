@@ -25,10 +25,10 @@ export default function PlanJeAfhalingRef() {
 
 
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
+        <div className="flex flex-col justify-center items-center min-h-screen p-6">
             <button
                 onClick={() => router.back()}
-                className="absolute top-4 left-4 bg-gray-300 text-black py-1 px-3 rounded"
+                className="absolute top-4 left-4 py-1 px-3 rounded"
             >
                 Terug
             </button>
@@ -42,7 +42,7 @@ export default function PlanJeAfhalingRef() {
                 onChange={(e) => setRef(e.target.value)}
             />
             <div className="w-full max-w-sm">
-                <Button onClick={handleGetBoekingOnRef}></Button>
+                <Button onClick={handleGetBoekingOnRef} className="w-full">Doorgaan</Button>
             </div>
         </div>
     );

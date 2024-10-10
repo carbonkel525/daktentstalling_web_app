@@ -78,10 +78,10 @@ export default function BoekJeStalling() {
 
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
+    <div className="flex flex-col justify-center items-center min-h-screen p-6">
       <button
         onClick={() => router.back()}
-        className="absolute top-4 left-4 bg-gray-300 text-black py-1 px-3 rounded"
+        className="absolute top-4 left-4 py-1 px-3 rounded"
       >
         Terug
       </button>
@@ -92,10 +92,10 @@ export default function BoekJeStalling() {
       <h2 className="text-lg font-semibold mb-6">Boek je stalling</h2>
 
       {/* Formulier */}
-      <form onSubmit={handleSubmit} className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-5 rounded-lg shadow-md">
         <label className="block mb-2">Type Daktent</label>
         <select
-          className="w-full mb-4 p-2 bg-white border border-gray-300 rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out"
+          className="w-full mb-4 p-2 border border-gra rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out"
           value={typeCover} // Gebruik value hier
           onChange={(e) => setTypeCover(e.target.value)}
         >
@@ -158,13 +158,13 @@ export default function BoekJeStalling() {
         />
 
         {/* Betalingsinformatie */}
-        <div className="border-t border-gray-300 my-4 py-2">
+        <div className="border-t my-4 py-2">
           <p>Je betaalt eenmalig: {demonteer && <strong>€49.95</strong>}</p>
           <p>Je betaalt maandelijks: <strong>€49.50</strong></p>
         </div>
 
         {/* Doorgaan knop */}
-        <Button type="submit" />
+        <Button type="submit" className="w-full">Doorgaan</Button>
       </form>
     </div>
   );

@@ -63,10 +63,10 @@ export default function PlanJeAfhaling() {
 
 
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
+        <div className="flex flex-col justify-center items-center min-h-screen p-6">
             <button
                 onClick={() => router.back()}
-                className="absolute top-4 left-4 bg-gray-300 text-black py-1 px-3 rounded"
+                className="absolute top-4 left-4py-1 px-3 rounded"
             >
                 Terug
             </button>
@@ -77,10 +77,10 @@ export default function PlanJeAfhaling() {
             <h2 className="text-lg font-semibold mb-6">Plan je afhaling</h2>
 
             {/* Referentienummer */}
-            <div className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
+            <div className="w-full max-w-md p-5 rounded-lg shadow-md">
                 <div className="mb-4">
                     <p className="text-sm font-semibold">Referentienummer:</p>
-                    <p className="text-gray-500">{id}</p>
+                    <p>{id}</p>
                 </div>
 
                 {/* Datum en tijd kiezen */}
@@ -100,17 +100,17 @@ export default function PlanJeAfhaling() {
                 {/* Demontage informatie */}
                 <div className="mb-4">
                     <span className="font-semibold">Montage bij afhaling: </span>
-                    <p className="text-gray-500">{boekingMontage}</p>
+                    <p>{boekingMontage}</p>
                 </div>
 
                 {/* Adres */}
                 <div className="mb-4">
                     <p className="font-semibold">Adres:</p>
-                    <p className="text-gray-500">Depot Wilaert-Van Boom, Liezele-dorp 22-24, 2870 Puurs-St-Amands</p>
+                    <p>Depot Wilaert-Van Boom, Liezele-dorp 22-24, 2870 Puurs-St-Amands</p>
                 </div>
 
                 {/* Boeken knop */}
-                <Button onClick={sendEmailToAdmins} />
+                <Button onClick={sendEmailToAdmins} className="w-full">Boek je afhaling</Button>
             </div>
         </div>
     );

@@ -81,7 +81,7 @@ export default function StallingOverzicht() {
                 <p className="text-lg font-bold pt-2">Je ontvangt ook een e-mail met de details van je afhaal moment.</p>
             </div>
             <div className='w-96'>
-                <Button onClick={() => router.push("/")} />
+                <Button onClick={() => router.push("/")} className='w-full'>Terug naar Home</Button>
             </div>
         </div>
     )

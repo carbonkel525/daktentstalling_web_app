@@ -32,7 +32,7 @@ export default function BekijkJeStalling() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-6 bg-white">
+    <div className="flex flex-col justify-center items-center min-h-screen p-6">
       {/* Hoofdtitel */}
       <Header />
 
@@ -40,69 +40,69 @@ export default function BekijkJeStalling() {
       <h2 className="text-lg font-semibold mb-6">Bekijk je stalling</h2>
 
       {/* Formulier met details */}
-      <div className="w-full max-w-md bg-gray-100 p-5 rounded-lg shadow-md">
+      <div className="w-full max-w-md p-5 rounded-lg shadow-md">
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Type Daktent:</p>
-          <p className="text-gray-500">{boeking ? boeking.typeCover : "N/A"}</p>
+          <p>{boeking ? boeking.typeCover : "N/A"}</p>
         </div>
 
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Luifel:</p>
-          <p className="text-gray-500">{boeking && boeking.luifel ? "Ja" : "N/A"}</p>
+          <p>{boeking && boeking.luifel ? "Ja" : "N/A"}</p>
         </div>
 
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Montage bij afhaling:</p>
-          <p className="text-gray-500">{boeking && boeking.demontage ? "Ja" : "N/A"}</p>
+          <p>{boeking && boeking.demontage ? "Ja" : "N/A"}</p>
         </div>
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Daktent afgezet op:</p>
-          <p className="text-gray-500">{boeking ? boeking.startDate : "N/A"}</p>
+          <p>{boeking ? boeking.startDate : "N/A"}</p>
         </div>
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Daktent afhalen op:</p>
-          <p className="text-gray-500">{boeking && boeking.endDate ? boeking.endDate : "N/A"}</p>
+          <p>{boeking && boeking.endDate ? boeking.endDate : "N/A"}</p>
         </div>
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Naam:</p>
-          <p className="text-gray-500 flex items-center">
+          <p className="flex items-center">
             <span role="img" aria-label="pencil">
               ✏️
             </span>{" "}
-            <p className="text-gray-500">
+            <p>
               {boeking ? `${boeking.firstName || ""} ${boeking.lastName || ""}`.trim() : "N/A"}
             </p>
           </p>
         </div>
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Email:</p>
-          <p className="text-gray-500 flex items-center">
+          <p className="flex items-center">
             <span role="img" aria-label="pencil">
               ✏️
             </span>{" "}
-            <p className="text-gray-500">{boeking ? boeking.email : "N/A"}</p>
+            <p>{boeking ? boeking.email : "N/A"}</p>
           </p>
         </div>
 
         <div className="flex justify-between mb-4">
           <p className="font-semibold">Gsm:</p>
-          <p className="text-gray-500 flex items-center">
+          <p className="flex items-center">
             <span role="img" aria-label="pencil">
               ✏️
             </span>{" "}
-            <p className="text-gray-500">{boeking ? boeking.phone : "N/A"}</p>
+            <p className="">{boeking ? boeking.phone : "N/A"}</p>
           </p>
         </div>
 
         {/* Betalingsinformatie */}
-        <div className="border-t border-gray-300 my-4 py-2">
+        <div className="border-t my-4 py-2">
           <p>Je betaalt maandelijks: <strong>€29.95</strong></p>
         </div>
 
         {/* Terug knop */}
         <button
           onClick={handleBack}
-          className="bg-gray-300 text-black py-2 rounded w-full active:bg-gray-200"
+          className=" py-2 rounded w-full"
         >
           Terug
         </button>
