@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 
@@ -21,7 +21,7 @@ interface OrderDetailsProps {
   demontage: string
 }
 
-export default function BestellingOverzicht() {
+function Page() {
   const router = useRouter()
   const [orderDetails, setOrderDetails] = useState<OrderDetailsProps>()
   const [loading, setLoading] = useState(true)
@@ -123,3 +123,12 @@ export default function BestellingOverzicht() {
   )
 }
 
+export default function BestellingOverzicht() {
+  return (
+    <Suspense>
+      <Page />
+    </Suspense>
+
+  )
+
+}
