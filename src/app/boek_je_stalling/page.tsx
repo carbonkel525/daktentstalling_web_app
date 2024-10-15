@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import Header from "@/components/Header";
 import Toggle from "@/components/Toggle";
@@ -12,7 +11,6 @@ import { Button } from "@/components/ui/button";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function BoekJeStalling() {
-  const router = useRouter();
 
   const [demonteer, setDemonteer] = useState(false);
   const [luifel, setLuifel] = useState(false);
@@ -34,7 +32,7 @@ export default function BoekJeStalling() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+
 
     try {
       // Maak een Stripe Checkout-sessie aan
@@ -78,94 +76,83 @@ export default function BoekJeStalling() {
 
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen p-6">
-      <button
-        onClick={() => router.back()}
-        className="absolute top-4 left-4 py-1 px-3 rounded"
-      >
-        Terug
-      </button>
-      {/* Hoofdtitel */}
+    <div className="p-10">
       <Header />
+      <div className="flex flex-col justify-center items-center min-h-screen p-6">
 
-      {/* Ondertitel */}
-      <h2 className="text-lg font-semibold mb-6">Boek je stalling</h2>
+        <h2 className="text-lg font-semibold mb-6">Boek je stalling</h2>
 
-      {/* Formulier */}
-      <form onSubmit={handleSubmit} className="w-full max-w-md p-5 rounded-lg shadow-md">
-        <label className="block mb-2">Type Daktent</label>
-        <select
-          className="w-full mb-4 p-2 border border-gra rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out"
-          value={typeCover} // Gebruik value hier
-          onChange={(e) => setTypeCover(e.target.value)}
-        >
-          <option disabled value="">Type Daktent</option> {/* Gebruik value="" om de placeholder te maken */}
-          <option value="Soft Cover">Soft Cover</option>
-          <option value="Hard Cover">Hard Cover</option>
-          <option value="Anders">Anders</option>
-        </select>
+        <form onSubmit={handleSubmit} className="w-full max-w-md p-5 rounded-lg shadow-md bg-card">
+          <label className="block mb-2">Type Daktent</label>
+          <select
+            className="w-full mb-4 p-2 border rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            value={typeCover} // Gebruik value hier
+            onChange={(e) => setTypeCover(e.target.value)}
+          >
+            <option disabled value="">Type Daktent</option> {/* Gebruik value="" om de placeholder te maken */}
+            <option value="Soft Cover">Soft Cover</option>
+            <option value="Hard Cover">Hard Cover</option>
+            <option value="Anders">Anders</option>
+          </select>
 
 
-        {/* Demontage Toggle */}
-        <Toggle label={"Luifel"} checked={luifel} onChange={handleLuifelChange} />
-        {/* Demontage Toggle */}
-        <Toggle label={"Demontage/montage"} checked={demonteer} onChange={handleDemonteerChange} />
+          <Toggle label={"Luifel"} checked={luifel} onChange={handleLuifelChange} />
+          <Toggle label={"Demontage/montage"} checked={demonteer} onChange={handleDemonteerChange} />
 
-        {/* Datum en tijd kiezen */}
-        <div className="mb-4">
-          <label className="block mb-2">Kies uw afzet moment</label>
+          <div className="mb-4">
+            <label className="block mb-2">Kies uw afzet moment</label>
+            <input
+              type="date"
+              className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <input
+              type="time"
+              className="w-full p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            />
+          </div>
+
           <input
-            type="date"
+            type="text"
+            placeholder="Voornaam"
             className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
-            onChange={(e) => setStartDate(e.target.value)}
+            required
+            onChange={(e) => setFirstName(e.target.value)}
+
           />
           <input
-            type="time"
-            className="w-full p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            type="text"
+            placeholder="Achternaam"
+            className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            required
+            onChange={(e) => setLastName(e.target.value)}
+
           />
-        </div>
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="tel"
+            placeholder="Gsm"
+            className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
+            required
+            onChange={(e) => setPhone(e.target.value)}
+          />
 
-        {/* Invoervelden voor Naam, Email en Gsm */}
-        <input
-          type="text"
-          placeholder="Voornaam"
-          className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
-          required
-          onChange={(e) => setFirstName(e.target.value)}
+          {/* Betalingsinformatie */}
+          <div className="border-t my-4 py-2">
+            <p>Je betaalt eenmalig: {demonteer && <strong>€49.95</strong>}</p>
+            <p>Je betaalt maandelijks: <strong>€49.50</strong></p>
+          </div>
 
-        />
-        <input
-          type="text"
-          placeholder="Achternaam"
-          className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
-          required
-          onChange={(e) => setLastName(e.target.value)}
-
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="tel"
-          placeholder="Gsm"
-          className="w-full mb-2 p-2 border rounded shadow-sm focus:border-blue-500 focus:outline-none transition duration-150 ease-in-out"
-          required
-          onChange={(e) => setPhone(e.target.value)}
-        />
-
-        {/* Betalingsinformatie */}
-        <div className="border-t my-4 py-2">
-          <p>Je betaalt eenmalig: {demonteer && <strong>€49.95</strong>}</p>
-          <p>Je betaalt maandelijks: <strong>€49.50</strong></p>
-        </div>
-
-        {/* Doorgaan knop */}
-        <Button type="submit" className="w-full">Doorgaan</Button>
-      </form>
+          {/* Doorgaan knop */}
+          <Button type="submit" className="w-full">Doorgaan</Button>
+        </form>
+      </div>
     </div>
   );
 }

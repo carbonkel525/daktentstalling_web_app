@@ -28,7 +28,7 @@ export default function Testimonials() {
         {testimonials.map((testimonial, index) => (
           <CarouselItem key={index}>
             <div className="py-7">
-              <Card className='h-auto rounded-2xl opacity-80'>
+              <Card className='h-auto rounded-2xl opacity-80 bg-secondary'>
                 <CardContent className="flex flex-col items-center justify-center p-4">
                     <p className="text-center text-sm text-muted-foreground">{testimonial.name}</p>
                     <p className="text-center text-sm text-muted-foreground">{testimonial.rating}</p>
