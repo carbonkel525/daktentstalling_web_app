@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     const refStalling = genereateRandomRefStalling();
 
     // Bereken het totale bedrag
-    const amount = 4950 + (demonteer ? 4995 : 0);
+    const amount = 1;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["bancontact", "card", "ideal"],
