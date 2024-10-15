@@ -45,7 +45,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div className="mt-8">
+            <div className="mt-6">
               <Testimonials />
             </div>
           </div>
