@@ -12,7 +12,7 @@ export default function Header() {
     <div>
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold cursor-pointer" onClick={() => router.push("/")}>DAKTENTSTALLING.BE</h1>
-        <div className="pl-3">
+        <div className="pl-4">
           <ModeToggle />
         </div>
       </div>
